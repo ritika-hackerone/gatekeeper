@@ -26,7 +26,7 @@ services:
         sync: false
       - key: SMTP_PASSWORD
         sync: false
-        services:
+services:
   - type: web
     name: abr-p3-gatekeeper-api
     runtime: python
