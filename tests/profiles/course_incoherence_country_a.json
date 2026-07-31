@@ -1,0 +1,39 @@
+{
+  "destination_country": "country-a",
+  "consent_given": true,
+  "funding": {
+    "liquid_funds_usd": 100000,
+    "sponsor_type": "self",
+    "funds_seasoning_days": 60
+  },
+  "academic": {
+    "highest_qualification": "Bachelor's Degree",
+    "gpa_percentage": 75,
+    "education_gap_months": 0,
+    "gap_explanation_provided": true
+  },
+  "course": {
+    "intended_course": "MSc Data Science",
+    "prior_field_of_study": "Computer Science",
+    "prior_field_matches_intended": false,
+    "coherence_explanation_provided": false
+  },
+  "immigration": {
+    "prior_visa_refusals": 0,
+    "refusal_countries": []
+  },
+  "english": {
+    "test_type": "ielts",
+    "score": 7.0,
+    "exempt": false
+  },
+  "sponsor": {
+    "relationship_to_applicant": null,
+    "relationship_proof_provided": false
+  },
+  "ties": {
+    "employment_status": "employed",
+    "property_ownership": true,
+    "family_ties_explanation_provided": true
+  }
+}

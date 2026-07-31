@@ -1,0 +1,75 @@
+country_code: country-b
+country_name: "United Kingdom (Student visa)"
+official_overview_url: "https://www.gov.uk/student-visa"
+funding_buffer_pct: 0.10
+
+rules:
+  - id: uk-funding-shortfall
+    statement: >
+      Maintenance funds below the published rate (tuition balance + monthly
+      living cost allowance for the course length, up to 9 months) are a
+      documented ground for refusal.
+    source_url: "https://www.gov.uk/student-visa/money"
+    severity: high
+    condition: "funding__sufficient == False"
+    action: >
+      Increase documented, held funds to cover the shortfall of
+      {funding__shortfall_usd} USD before starting the 28-day holding period.
+
+  - id: uk-28-day-rule
+    statement: >
+      Funds must be held continuously for at least 28 days, ending no more
+      than 31 days before the application, or the application can be refused
+      on maintenance grounds even if the total amount is correct.
+    source_url: "https://www.gov.uk/student-visa/money"
+    severity: high
+    condition: "funding__funds_seasoning_days < 28"
+    action: >
+      Do not apply yet. Let the required funds sit untouched in the account
+      for a full 28-day period, then apply within 31 days of the day the
+      28-day period ends, using a bank statement/letter as evidence.
+
+  - id: uk-sponsor-evidence
+    statement: >
+      Where a parent/legal guardian sponsors the applicant, additional
+      relationship and consent evidence is expected.
+    source_url: "https://www.gov.uk/student-visa/money"
+    severity: medium
+    condition: "funding__sponsor_type != 'self' and sponsor__relationship_proof_provided == False"
+    action: >
+      Obtain a signed letter from the sponsor confirming the relationship and
+      consent to fund the studies, plus proof of relationship (birth
+      certificate or equivalent).
+
+  - id: uk-course-progression
+    statement: >
+      Genuineness assessments look at whether the course represents credible
+      academic progression from the applicant's most recent qualification.
+    source_url: "https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-student"
+    severity: medium
+    condition: "course__coherence_explanation_provided == False and course__prior_field_matches_intended == False"
+    action: >
+      Prepare a short personal statement explaining how the course builds on
+      prior study or work experience and fits your career plan.
+
+  - id: uk-prior-refusal
+    statement: >
+      Previous UK or other visa refusals should be disclosed accurately and
+      can be examined as part of the genuine student assessment.
+    source_url: "https://www.gov.uk/student-visa/apply"
+    severity: high
+    condition: "immigration__prior_visa_refusals > 0"
+    action: >
+      Disclose the refusal(s) accurately in the application and prepare a
+      short written note on what has changed since then.
+
+  - id: uk-unexplained-gap
+    statement: >
+      Significant unexplained gaps in education history can raise questions
+      as part of the genuine student assessment.
+    source_url: "https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-student"
+    severity: low
+    condition: "academic__education_gap_months >= 6 and academic__gap_explanation_provided == False"
+    action: >
+      Add a short written note covering the {academic__education_gap_months}-month
+      gap in your personal statement or supporting documents.

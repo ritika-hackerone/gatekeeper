@@ -1,0 +1,87 @@
+country_code: country-a
+country_name: "United States (F-1)"
+official_overview_url: "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+funding_buffer_pct: 0.20
+
+rules:
+  - id: us-funding-shortfall
+    statement: >
+      The school certifies I-20 funding on the basis of one academic year of
+      tuition and living costs. Documented funds below that figure (plus this
+      project's buffer) are a common reason for I-20/visa follow-up questions.
+    source_url: "https://studyinthestates.dhs.gov/students/prepare/paying-for-your-sevp-certified-school"
+    severity: high
+    condition: "funding__sufficient == False"
+    action: >
+      Add documented funds (bank statement, loan sanction letter, or sponsor
+      affidavit) to cover the shortfall of {funding__shortfall_usd} USD before
+      the I-20 is issued or before the visa interview, whichever is sooner.
+
+  - id: us-funds-seasoning
+    statement: >
+      Sudden large, unexplained deposits shortly before applying are commonly
+      questioned; funds seasoned over time are viewed as more credible.
+    source_url: "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+    severity: medium
+    condition: "funding__funds_seasoning_days < 30"
+    action: >
+      Where possible, hold the funds in the account for at least 30 days
+      before applying, and keep a short written note explaining the source
+      of any large recent deposit.
+
+  - id: us-unexplained-gap
+    statement: >
+      Unexplained gaps in education or employment history are a common
+      question at student visa interviews.
+    source_url: "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+    severity: medium
+    condition: "academic__education_gap_months >= 6 and academic__gap_explanation_provided == False"
+    action: >
+      Prepare a one-paragraph written explanation of the {academic__education_gap_months}-month
+      gap (e.g. work, family, health) and be ready to state it plainly at interview.
+
+  - id: us-prior-refusal
+    statement: >
+      Prior visa refusals must be disclosed accurately on the DS-160 and are
+      routinely raised at interview.
+    source_url: "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+    severity: high
+    condition: "immigration__prior_visa_refusals > 0"
+    action: >
+      Disclose the prior refusal(s) accurately on the DS-160 and prepare a short,
+      factual explanation of what has changed since the refusal.
+
+  - id: us-course-coherence
+    statement: >
+      Officers may probe whether the intended course of study follows
+      credibly from the applicant's prior education and career plans.
+    source_url: "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+    severity: medium
+    condition: "course__coherence_explanation_provided == False and course__prior_field_matches_intended == False"
+    action: >
+      Prepare a short written explanation connecting the prior field of study
+      or work to the intended course, and how it fits your stated career plan.
+
+  - id: us-sponsor-relationship
+    statement: >
+      Where a third party (not the applicant) is the financial sponsor, the
+      relationship and the sponsor's ability/willingness to pay may be probed.
+    source_url: "https://studyinthestates.dhs.gov/students/prepare/paying-for-your-sevp-certified-school"
+    severity: medium
+    condition: "funding__sponsor_type != 'self' and sponsor__relationship_proof_provided == False"
+    action: >
+      Gather proof of the relationship to the sponsor (e.g. birth certificate,
+      marriage certificate) and a signed affidavit of support (Form I-134 style)
+      confirming intent to fund the studies.
+
+  - id: us-weak-home-ties
+    statement: >
+      Consular officers weigh evidence of ties to the home country against the
+      INA 214(b) presumption of intending immigrant status.
+    source_url: "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html"
+    severity: high
+    condition: "ties__employment_status == 'unemployed' and ties__property_ownership == False and ties__family_ties_explanation_provided == False"
+    action: >
+      Document concrete ties to home (family responsibilities, a job offer on
+      return, property, or enrollment plans after the program) and be ready to
+      describe post-graduation plans clearly at interview.

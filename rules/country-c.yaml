@@ -1,0 +1,62 @@
+country_code: country-c
+country_name: "Canada (Study Permit)"
+official_overview_url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html"
+funding_buffer_pct: 0.15
+
+rules:
+  - id: ca-funding-shortfall
+    statement: >
+      Proof of funds must cover first-year tuition plus the published
+      living-cost allowance; documented funds below that figure are a common
+      basis for refusal or request for more information.
+    source_url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents/financial-support.html"
+    severity: high
+    condition: "funding__sufficient == False"
+    action: >
+      Add documented funds (GIC, bank statement, or loan) to cover the
+      shortfall of {funding__shortfall_usd} USD before applying.
+
+  - id: ca-dual-intent
+    statement: >
+      Officers weigh the applicant's likely intent to leave Canada at the end
+      of the authorized stay, alongside genuine study intent.
+    source_url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/eligibility.html"
+    severity: high
+    condition: "ties__employment_status == 'unemployed' and ties__property_ownership == False and ties__family_ties_explanation_provided == False"
+    action: >
+      Prepare a letter of explanation describing ties to home country and
+      plans after completing the program, as recommended in the official
+      letter-of-explanation guidance.
+
+  - id: ca-study-plan-coherence
+    statement: >
+      A written study plan/letter of explanation connecting prior education
+      and career goals to the chosen program is explicitly recommended.
+    source_url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/write-letter-explanation.html"
+    severity: medium
+    condition: "course__coherence_explanation_provided == False"
+    action: >
+      Write a study plan letter explaining why this program, how it follows
+      from prior education/work, and how it fits long-term career goals.
+
+  - id: ca-prior-refusal
+    statement: >
+      Prior refusals (Canadian or from any country) should be disclosed
+      accurately and can be examined during eligibility review.
+    source_url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/eligibility.html"
+    severity: high
+    condition: "immigration__prior_visa_refusals > 0"
+    action: >
+      Disclose the refusal(s) accurately and address the reason for the
+      previous refusal directly in the letter of explanation.
+
+  - id: ca-sponsor-evidence
+    statement: >
+      Where funds are provided by someone other than the applicant, proof of
+      the relationship and the sponsor's financial capacity is expected.
+    source_url: "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents/financial-support.html"
+    severity: medium
+    condition: "funding__sponsor_type != 'self' and sponsor__relationship_proof_provided == False"
+    action: >
+      Provide proof of relationship to the sponsor and evidence of the
+      sponsor's ability to provide the funds (bank statements, employment letter).
